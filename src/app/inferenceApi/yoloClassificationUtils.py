@@ -17,10 +17,6 @@ def process_image(image_bytes: bytes) -> Image:
 def get_inference_results(model: YOLO, image: Image) -> dict:
     """Запуск классификации и возврат результатов."""
     results = model(image)
-    '''return {
-        "class_id": int(results[0].probs.top1),
-        "confidence": float(results[0].probs.top1conf),
-    }'''
 
     probs = results[0].probs
 

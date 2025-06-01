@@ -37,15 +37,6 @@ def main(page: ft.Page):
     page.title = "Medical Analysis App"
     page.theme_mode = ft.ThemeMode.LIGHT
 
-    '''scale_slider = ft.Slider(
-        min=1.0,
-        max=4.0,
-        divisions=3,
-        value=1.0,
-        label="Масштаб: {value}x"
-    )'''
-
-    #scale_slider.visible = False
     differential_diagnostic_button = ft.ElevatedButton("Запустить процесс дифференциальной диагностики",
                                                        style=ft.ButtonStyle(
                                                            bgcolor=ft.colors.GREEN_100,
@@ -79,7 +70,6 @@ def main(page: ft.Page):
 
                 differential_diagnostic_button.disabled = False
                 upload_button.visible = True
-                #select_button.disabled = True  # Отключаем кнопку "Выбрать пациента", так как пациент уже выбран
                 patient_info.visible = True
             else:
                 # Если пациента не нашли
@@ -195,17 +185,6 @@ def main(page: ft.Page):
                     db_result.final_diagnosis = diagnosis_text
                     await session.commit()
 
-                    # Записываем историю изменений (опционально)
-                    '''await session.execute(
-                        insert(PatientDiagnosisHistory).values(
-                            patient_id=current_patient.id,
-                            image_path=db_result.image_path,
-                            diagnosis=diagnosis_text,
-                            changed_at=datetime.now()
-                        )
-                    )
-                    await session.commit()'''
-
                     diagnosis_result.value = "Диагноз успешно сохранен!"
                     diagnosis_result.color = "green"
 
@@ -227,10 +206,6 @@ def main(page: ft.Page):
     diagnosis_field = ft.TextField(label="Окончательный диагноз", multiline=True)
     save_diagnosis_button = ft.ElevatedButton("Сохранить диагноз", on_click=save_final_diagnosis)
     diagnosis_result = ft.Text()
-    '''prepare_diagnosis_button = ft.ElevatedButton(
-        "Подготовить поле для диагноза",
-        on_click=check_and_prepare_diagnosis
-    )'''
 
     # Добавляем новую функцию для вызова API инференса
     async def run_inference(e):
@@ -303,19 +278,6 @@ def main(page: ft.Page):
             progress_ring.visible = False
             page.update()
 
-    '''async def save_results_to_db(patient_id, image_url, result):
-        """Сохраняет результаты анализа в базу данных"""
-        async with new_session() as session:
-            db_result = PatientResultsModel(
-                patient_id=patient_id,
-                image_path=image_url,
-                study_date=date.today(),
-                result_inference=f"{result['top_class_name']}",
-                final_diagnosis=None,
-                cost=round(random.uniform(1000, 4000), 2)
-            )
-            session.add(db_result)
-            await session.commit()'''
 
     def toggle_middlename(e):
         middlename_field.visible = not middlename_check.value
@@ -328,17 +290,17 @@ def main(page: ft.Page):
     def clear_fields(e):
         surname_field.value = ""
         name_field.value = ""
-        #name_field.disabled = True
+
         middlename_check.value = False
         middlename_field.value = ""
         middlename_field.visible = True
-        #middlename_field.disabled = True
+
         birthdate_field.value = ""
         uuid_field.value = ""
         patient_info.visible = False
         error_text.value = ""
         error_text.visible = False
-        #age_field.value = ""
+
         upload_button.visible = False
         image.src = None
         image.visible = False  # Скрываем изображение
@@ -368,7 +330,7 @@ def main(page: ft.Page):
     birthdate_field = ft.TextField(label="Дата рождения (DD.MM.YYYY)")
     uuid_field = ft.TextField(label="UUID пациента")
     select_button = ft.ElevatedButton("Выбрать пациента", disabled=True)
-    #age_field = ft.TextField(label="Возраст")
+
     clear_button = ft.ElevatedButton("Очистить")
 
     # Для отображения информации о пациенте
@@ -416,7 +378,7 @@ def main(page: ft.Page):
             ct_detection_image.visible = True
 
             detection_result_text.value = "Здесь будет результат детекции"
-            #scale_slider.visible = False  # сбрасываем слайдер
+
             page.update()
 
     def run_detection(e):
@@ -430,21 +392,19 @@ def main(page: ft.Page):
         page.update()
 
         try:
-            #scale_factor = scale_slider.value  # Можно сделать настраиваемым через Slider
+
             with open(detection_image.src, "rb") as f:
                 files = {"file": f}
-                #params = {"scale": scale_factor}
+
                 response = requests.post(
                     f"{BASE_URL_XrayDETECTION}/detect",
-                    files=files,
-                    #params=params,
+                    files=files
                 )
 
                 if response.status_code == 200:
                     img_bytes = response.content
                     detection_image.src_base64 = base64.b64encode(img_bytes).decode("utf-8")
-                    #detection_image.width = int(detection_image.width * scale_factor)
-                    #detection_image.height = int(detection_image.height * scale_factor)
+
                     detection_image.visible = True
 
                     # Проверка содержимого заголовка
@@ -453,10 +413,10 @@ def main(page: ft.Page):
 
                     # Обновляем результаты
                     detections = json.loads(detection_results_header)
-                    #scale = float(response.headers.get("X-Image-Scale", 1.0))
+
                     detection_result_text.value = format_detection_results(detections)
 
-                    #scale_slider.visible = True
+
 
         except Exception as ex:
             detection_result_text.value = f"Ошибка: {str(ex)}"
@@ -474,21 +434,19 @@ def main(page: ft.Page):
         page.update()
 
         try:
-            #scale_factor = scale_slider.value  # Можно сделать настраиваемым через Slider
+
             with open(ct_detection_image.src, "rb") as f:
                 files = {"file": f}
-                #params = {"scale": scale_factor}
+
                 response = requests.post(
                     f"{BASE_URL_CTDETECTION}/detect",
-                    files=files,
-                    #params=params,
+                    files=files
                 )
 
                 if response.status_code == 200:
                     img_bytes = response.content
                     ct_detection_image.src_base64 = base64.b64encode(img_bytes).decode("utf-8")
-                    #ct_detection_image.width = int(ct_detection_image.width * scale_factor)
-                    #ct_detection_image.height = int(ct_detection_image.height * scale_factor)
+
                     ct_detection_image.visible = True
 
                     # Проверка содержимого заголовка
@@ -497,10 +455,10 @@ def main(page: ft.Page):
 
                     # Обновляем результаты
                     detections = json.loads(ct_detection_results_header)
-                    #scale = float(response.headers.get("X-Image-Scale", 1.0))
+
                     ct_detection_result_text.value = format_detection_results(detections)
 
-                    #scale_slider.visible = True
+
 
         except Exception as ex:
             ct_detection_result_text.value = f"Ошибка: {str(ex)}"
@@ -530,15 +488,9 @@ def main(page: ft.Page):
         select_button.disabled = not (required_fields_filled and middlename_ok and date_valid)
         page.update()
 
-    '''def validate_birthdate(e):
-        pattern = r"^\d{2}\.\d{2}\.\d{4}$"
-        if not re.match(pattern, birthdate_field.value):
-            error_text.value = "Ошибка: введите дату в формате DD.MM.YYYY"
-        else:
-            error_text.value = ""
-        page.update()'''
 
-    #birthdate_field.on_change = validate_birthdate
+
+
     birthdate_field.on_change = validate_fields
 
     def upload_image(e: ft.FilePickerResultEvent):
@@ -553,19 +505,7 @@ def main(page: ft.Page):
     # Поле для анамнеза
     anamnesis_field = ft.TextField(label="Анамнез пациента", multiline=True)
 
-    '''def enable_name_field(e):
-        if surname_field.value:
-            name_field.disabled = False
-        else:
-            name_field.disabled = True
-            name_field.value = ""
-            middlename_check.value = False
-            middlename_field.value = ""
-            middlename_field.visible = False
-            middlename_field.disabled = True
-            #select_button.disabled = True
-            upload_button.visible = False
-        page.update()'''
+
 
     def clear_results_inference(e):
         image.src = None
@@ -580,8 +520,7 @@ def main(page: ft.Page):
         detection_image.visible = False
 
         detection_result_text.value = "Здесь будет результат детекции"
-        #scale_slider.visible = False
-        #scale_slider.value = 1.0
+
         detection_image.width = 800
         detection_image.height = 800
 
@@ -593,8 +532,7 @@ def main(page: ft.Page):
         ct_detection_image.visible = False
 
         ct_detection_result_text.value = "Здесь будет результат детекции"
-        #scale_slider.visible = False
-        #scale_slider.value = 1.0
+
         ct_detection_image.width = 800
         ct_detection_image.height = 800
 
@@ -640,10 +578,6 @@ def main(page: ft.Page):
                     upload_button,
                     image,
                     ft.Divider(),
-                    #prepare_diagnosis_button,  # Новая кнопка
-                    #diagnosis_field,
-                    #save_diagnosis_button,
-                    #diagnosis_result,
                     ft.Divider(),
                     ft.ElevatedButton("Анамнез", on_click=lambda e: page.go("/anamnesis")),
                     differential_diagnostic_button,
@@ -702,7 +636,6 @@ def main(page: ft.Page):
                     bgcolor=ft.colors.YELLOW_400,
                 ), on_click=run_detection),
                 detection_result_text,
-                #scale_slider,
                 ft.ElevatedButton("Очистить результат детекции", style=ft.ButtonStyle(
                     bgcolor=ft.colors.RED_600,
                     color=ft.colors.WHITE
@@ -726,7 +659,6 @@ def main(page: ft.Page):
                     bgcolor=ft.colors.YELLOW_400,
                 ), on_click=run_ct_detection),
                 ct_detection_result_text,
-                #scale_slider,
                 ft.ElevatedButton("Очистить результат детекции", style=ft.ButtonStyle(
                     bgcolor=ft.colors.RED_600,
                     color=ft.colors.WHITE
@@ -734,13 +666,6 @@ def main(page: ft.Page):
             ],
             scroll=ft.ScrollMode.ADAPTIVE
         )
-
-    '''def analytics_view():
-        return ft.View(
-            "/analytics",
-            controls=[ft.ElevatedButton("Назад", on_click=lambda e: page.go("/"))],
-            scroll=ft.ScrollMode.ADAPTIVE
-        )'''
 
     # Навигация
     def route_change(route):

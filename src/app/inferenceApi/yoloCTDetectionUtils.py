@@ -21,68 +21,6 @@ def image_to_byte_array(image: Image) -> bytes:
     return img_byte_arr.getvalue()
 
 
-'''def draw_yolo_polygons(result, image: Image) -> tuple[list, Image]:
-    draw = ImageDraw.Draw(image)
-    detections = []
-    class_names = result.names
-
-    try:
-        font = ImageFont.truetype("arial.ttf", size=12)
-    except:
-        font = ImageFont.load_default()
-
-    boxes = result.boxes
-    masks = result.masks
-
-    if masks:
-        for i, polygon in enumerate(masks.xy):
-            class_id = int(boxes.cls[i])
-            confidence = float(boxes.conf[i])
-            class_name = class_names[class_id]
-
-            coords = polygon.tolist()  # [[x1, y1], [x2, y2], ...]
-            flat_coords = [coord for point in coords for coord in point]
-
-            # Рисуем полигон
-            draw.polygon(flat_coords, outline="red", width=2)
-
-            # Центр полигона
-            cx = sum(x for x, _ in coords) / len(coords)
-            cy = sum(y for _, y in coords) / len(coords)
-            draw.text((cx, cy), f"{class_name} {confidence:.2f}", fill="green", font=font)
-
-            detections.append({
-                "class_id": class_id,
-                "class_name": class_name,
-                "confidence": confidence,
-                "polygon": coords
-            })
-    else:
-        # Если масок нет — fallback на bounding boxes
-        for i, box in enumerate(boxes.xyxy):
-            class_id = int(boxes.cls[i])
-            confidence = float(boxes.conf[i])
-            class_name = class_names[class_id]
-            x1, y1, x2, y2 = map(float, box.tolist())
-
-            draw.rectangle([x1, y1, x2, y2], outline="blue", width=2)
-            draw.text((x1, y1 - 10), f"{class_name} {confidence:.2f}", fill="blue", font=font)
-
-            detections.append({
-                "class_id": class_id,
-                "class_name": class_name,
-                "confidence": confidence,
-                "bbox": [x1, y1, x2, y2]
-            })
-
-    return detections, image
-
-
-def get_detection_results(model: YOLO, image: Image, scale_factor=1.0):
-    results = model(image)
-    return draw_yolo_polygons(results[0], image.copy())'''
-
-
 def get_detection_results(model: YOLO, image: Image):
     results = model(image)
     result = results[0]
