@@ -165,6 +165,6 @@ storage/!/src/storage/
 
 !/src/app/inferenceApi/main.py
 !/src/app/inferenceApi/yolo_model_onnx.py
-!/src/assets/
+/src/assets/
 !/pyproject.toml
 !/src/airflow/
