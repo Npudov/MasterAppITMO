@@ -167,3 +167,5 @@ storage/!/src/storage/
 /src/app/inferenceApi/yolo_model_onnx.py
 /src/assets/
 /pyproject.toml
+/src/yandexConfig/yandex.env
+/src/app/database.env
