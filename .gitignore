@@ -163,8 +163,7 @@ cython_debug/
 # Flet
 storage/!/src/storage/
 
-!/src/app/inferenceApi/main.py
-!/src/app/inferenceApi/yolo_model_onnx.py
+/src/app/inferenceApi/main.py
+/src/app/inferenceApi/yolo_model_onnx.py
 /src/assets/
-!/pyproject.toml
-!/src/airflow/
+/pyproject.toml
