@@ -1,24 +1,24 @@
 # Master app
 
-## Run the app
+## Запуск приложения
 
 ### uv
 
-Run as a desktop app:
+Запустить как десктоп приложение:
 
 ```
 uv run flet run
 ```
 
-Run as a web app:
+Запустить как веб приложение:
 
 ```
 uv run flet run --web
 ```
 
-For more details on running the app, refer to the [Getting Started Guide](https://flet.dev/docs/getting-started/).
+Для более детального рассмотрения запуска, смотреть [Getting Started Guide](https://flet.dev/docs/getting-started/).
 
-## Build the app
+## Сборка приложения
 
 ### Windows
 
@@ -26,7 +26,7 @@ For more details on running the app, refer to the [Getting Started Guide](https:
 flet build windows -v
 ```
 
-For more details on building Windows package, refer to the [Windows Packaging Guide](https://flet.dev/docs/publish/windows/).
+Для больших деталей по сборке для Windows, смотреть [Windows Packaging Guide](https://flet.dev/docs/publish/windows/).
 
 ## Установка зависимостей
 Для начала установите зависимости:
@@ -42,6 +42,7 @@ python -m uvicorn src.app.inferenceApi.yoloClassificationModelUltralytics:app --
 ```
 Проверку работу моделей можно провести через интерфейс UI самого FastApi.
 Для полной проверки работы самого приложения нужно получение отладочного токена YandexApi.
+
 ## Запуск БД с данными пациентов
 В папке src/app/postgres-docker запустите docker-compose
 ```
