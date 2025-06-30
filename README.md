@@ -1,5 +1,8 @@
 # Master app
 
+The multimodal platform for primary diagnostics of diseases based on
+artificial intelligence
+
 ## Application Startup
 
 Run as a desktop application:
@@ -55,6 +58,10 @@ docker compose up -d
 
 ## Airflow
 The src/airflow folder contains the SQL scripts and dags used in airflow. The entire network configuration for connections to the patient database and the developed storage was set in Airflow.
+
+## Model weights
+The src/app/inferenceApi/weights folder contains the model weights used for scoliosis detection, differential scoliosis classification and ct spine segmentation.
+
 
 ---
 ---
@@ -114,3 +121,6 @@ docker compose up -d
 
 ## Airflow
 В папке src/airflow находятся SQL скрипты и dags, используемые в airflow. В Airflow была задана вся сетевая конфигурация для соединений с базой пациентов и разработанным хранилищем
+
+## Веса моделей
+В папке src/app/inferenceApi/weights содержатся веса моделей для детекции сколиоза, дифференциальной диагностики сколиоза, и кт сегментации позвоночника.
